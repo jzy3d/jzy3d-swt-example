@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>org.jzy3d</groupId>
+	<artifactId>jzy3d-swt-example</artifactId>
+	<version>2.0.1-SNAPSHOT</version>
+	<name>Jzy3d SWT Example</name>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<version.java>1.8</version.java>
+		<version.swt>3.116.100</version.swt>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.jzy3d</groupId>
+			<artifactId>jzy3d-native-jogl-swt</artifactId>
+			<version>2.0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>org.jzy3d</groupId>
+			<artifactId>jzy3d-core</artifactId>
+			<version>2.0.1-SNAPSHOT</version>
+		</dependency>
+
+		<!-- <dependency>
+			<groupId>org.jzy3d</groupId>
+			<artifactId>jzy3d-emul-gl-swt</artifactId>
+			<version>${project.version}</version>
+		</dependency>  -->
+		
+		<!-- The org.eclipse.platform::org.eclipse.swt artifact is only an empty 
+			hull for SWT (the jar does not contain any class-files). The actual class 
+			files are contained in platform-specific artifacts. This is due to the design 
+			of the SWT project with one org.eclipse.swt Eclipse plug-in and multiple 
+			fragments one for each platform containing the native code/adjustments. In 
+			order to get the jar for a certain platform a dependency for the artifact 
+			for that platform must be declared. In order to not declare a compile time 
+			dependency to all specific platforms referenced below the dependencies are 
+			marked as optional and are therefore only present when developing jzy3d. 
+			It is assumed that the platforms chosen below are the main dev-platforms. -->
+		<dependency>
+			<groupId>org.eclipse.platform</groupId>
+			<artifactId>org.eclipse.swt</artifactId>
+			<version>${version.swt}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.eclipse.platform</groupId>
+			<artifactId>org.eclipse.jface</artifactId>
+			<version>${version.swt}</version>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.8.1</version>
+				<configuration>
+					<source>${version.java}</source>
+					<target>${version.java}</target>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+
+	<profiles>
+		<!-- https://maven.apache.org/guides/introduction/introduction-to-profiles.html 
+			https://stackoverflow.com/questions/19023109/values-for-os-family-in-maven-profile-activation-condition -->
+
+		<profile>
+			<id>MacOS x86_64</id>
+			<activation>
+				<os>
+					<family>mac</family>
+					<arch>x86_64</arch>
+				</os>
+			</activation>
+			<dependencies>
+				<dependency>
+					<groupId>org.eclipse.platform</groupId>
+					<artifactId>org.eclipse.swt.cocoa.macosx.x86_64</artifactId>
+					<version>${version.swt}</version>
+				</dependency>
+			</dependencies>
+		</profile>
+
+		<profile>
+			<id>MacOS Aarch64</id>
+			<activation>
+				<os>
+					<family>mac</family>
+					<arch>aarch64</arch>
+				</os>
+			</activation>
+			<dependencies>
+				<dependency>
+					<groupId>org.eclipse.platform</groupId>
+					<artifactId>org.eclipse.swt.cocoa.macosx.aarch64</artifactId>
+					<version>${version.swt}</version>
+				</dependency>
+			</dependencies>
+		</profile>
+
+		<profile>
+			<id>Windows</id>
+			<activation>
+				<os>
+					<family>Windows</family>
+					<!-- <name>Windows XP</name> <arch>x86</arch> <version>5.1.2600</version> -->
+				</os>
+			</activation>
+			<dependencies>
+				<dependency>
+					<groupId>org.eclipse.platform</groupId>
+					<artifactId>org.eclipse.swt.win32.win32.x86_64</artifactId>
+					<version>${version.swt}</version>
+				</dependency>
+			</dependencies>
+		</profile>
+
+		<profile>
+			<id>Unix</id>
+			<activation>
+				<os>
+					<family>unix</family>
+				</os>
+			</activation>
+			<dependencies>
+				<dependency>
+					<groupId>org.eclipse.platform</groupId>
+					<artifactId>org.eclipse.swt.gtk.linux.x86_64</artifactId>
+					<version>${version.swt}</version>
+				</dependency>
+			</dependencies>
+		</profile>
+	</profiles>
+
+	<!--To retrieve Jzy3d dependencies -->
+	<repositories>
+		<repository>
+			<id>jzy3d-releases</id>
+			<name>Jzy3d Releases</name>
+			<url>https://maven.jzy3d.org/releases/</url>
+		</repository>
+		<repository>
+			<id>jzy3d-snapshots</id>
+			<name>Jzy3d Snapshots</name>
+			<url>https://maven.jzy3d.org/snapshots/</url>
+		</repository>
+	</repositories>
+</project>
